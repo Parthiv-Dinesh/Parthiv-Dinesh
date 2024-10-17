@@ -7,87 +7,47 @@
 
 
 
-.model small
-.stack 100h
-.data
-array dw 6,7,3,5,8,6,2,7,4,9,1
-n dw 10
-target dw 3
-found db 0
-msgfound db 'number found','$'
-msgnotfound db 'number not found','$'
-space dw ' ','$'
-
-.code
-main proc
-mov ax,@data
-mov ds,ax
-
-
-mov cx,n
-dec cx
-
-outer_loop:
-mov si,0
-mov di,0
-mov bx,cx
-add bx,bx
-
-inner_loop:
-mov ax,array[si]
-mov dx,array[si+2]
-cmp ax,dx
-
-jbe no_swap
-
-;swap elements
-mov array[si],dx
-mov array[si+2],ax
-
-no_swap:
-add si,02h
-cmp si,bx
-jb inner_loop
-dec cx
-jnz outer_loop
-mov cx,n
-mov si,0
-
-print_loop:
-mov ax,array[si]
-add ax,30h
-mov dx,ax
-mov ah,02h
-int 21h
-lea dx,space
-mov ah,09h
-int 21h
-add si,02h
-loop print_loop
-mov cx,n
-mov si,0
-mov ax,target
-
-search_loop:
-mov dx,array[si]
-cmp ax,dx
-je found_element
-add si,02h
-loop search_loop
-
-not_found:
-lea dx,msgnotfound
-mov ah,09h
-int 21h
-jmp end_program
-
-found_element:
-lea dx,msgfound
-mov ah,09h
-int 21h
-
-end_program:
-mov ah,4ch
-int 21h
-main endp
-end main
+READ MACRO 
+MOV AH,3FH 
+LEA DX,A 
+INT 21H 
+ENDM 
+DISP MACRO B 
+MOV AH,09H 
+LEA DX,B 
+INT 21H 
+ENDM 
+.MODEL SMALL 
+.STACK 
+.DATA 
+MSG1 DB 0AH,0DH,”Enter the first string:$” 
+MSG2 DB 0AH,0DH,”Enter the second string:$” 
+MSG3 DB 0AH,0DH,”New string:$” 
+STR1 DB 100 DUP(“$”) 
+STR2 DB 100 DUP(“$”) 
+.CODE 
+START 
+MOV AX,@DATA 
+MOV DS,AX 
+MOV SI,00H 
+MOV DI,00H 
+DISP MSG1 
+READ STR1 
+SUB AX,02H 
+MOV SI,AX 
+DISP MSG2 
+READ STR2 
+DISP MSG3 
+L1: 
+ CMP STR2[DI],”$” 
+ JNE L2 
+ DISP STR1 
+ JMP L3 
+L2: 
+ MOV AH,STR2[DI] 
+ MOV STR1 [SI],AH 
+ INC SI 
+ INC DI
+LOOP L1 
+L3: 
+ END START
