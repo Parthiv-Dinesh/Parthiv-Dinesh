@@ -5,8 +5,8 @@
 - 📫 How to reach me via parthivdinesh5946@gmail.com
 - ⚡ Fun fact: Coding leads to great cognitive benefits.
 
-<!---
-Parthiv-Dinesh/Parthiv-Dinesh is a ✨ special ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+
+
 .model small
 .stack 100h
 .data
